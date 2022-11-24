@@ -4,14 +4,8 @@ az extension add --name stream-analytics
 az provider register --namespace 'Microsoft.Devices' --wait 2>nul
 az provider register --namespace 'Microsoft.StreamAnalytics' --wait 2>nul
 
-rg=$(az group list --query "[].name" -o tsv);
-if [[ "$rg" != learn* ]]; then
-    rgguid=$(cat /proc/sys/kernel/random/uuid)
-    rgsuffix=${rgguid//[-]/}
-    rgsuffix=${rgsuffix:0:18}
-    rg=learn${rgsuffix}
-    az group create --name $rg --location westus --output none
-fi
+# Find resource group name
+export rg=$(az group list --query '[0].name' --output tsv)
 
 echo "Using the $rg resource group..."
 guid=$(cat /proc/sys/kernel/random/uuid)
